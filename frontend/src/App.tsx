@@ -5,21 +5,12 @@ import SignUp from './pages/auth/Signup';
 import Wallet from './pages/wallet/Wallet';
 import Verify from './pages/auth/Verify'; 
 import MiniKitProvider from './minikit-provider';
-import { useEffect, useState } from 'react';
 import Dashboard from './pages/dashboard/Dashboard';
 import Header from './pages/home/Header';
 import { AuthProvider } from './context/auth-provider'; 
 import VerifyOwnership from './components/Eruda/layout/VerifyOwnership';
 
 function App() {
-  const [_isAuthenticated, setIsAuthenticated] = useState(false);
-
-  // Check if user is authenticated on app load
-  useEffect(() => {
-    const userAddress = localStorage.getItem('user_address');
-    setIsAuthenticated(!!userAddress);
-  }, []);
-
   return (
     <AuthProvider>
       <MiniKitProvider>
