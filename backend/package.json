@@ -7,8 +7,8 @@
   "scripts": {
     "dev": "tsx watch --env-file=./.env --clear-screen=false ./index.ts | pino-pretty",
     "a": "tsx --help",
-    "dev:server": "node index.ts",
-    "start": "node index.ts"
+    "build": "tsc",
+  "start": "node dist/index.js"
   },
   "dependencies": {
     "@worldcoin/minikit-js": "1.1.1",
