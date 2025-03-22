@@ -1,29 +1,34 @@
-
-
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import MiniKitProvider from './minikit-provider';
-import Login from './pages/auth/Login';
-import SignUp from "./pages/auth/Signup";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './pages/home/Home';
-import Kyc from './pages/kyc/Kyc';
+import Login from './pages/auth/Login';
+import SignUp from './pages/auth/Signup';
 import Wallet from './pages/wallet/Wallet';
-import './index.css';
+import Verify from './pages/auth/Verify'; // Import the new Verify component
+import MiniKitProvider from './minikit-provider';
+import { useEffect, useState } from 'react';
 
-export default function App() {
+function App() {
+  const [_isAuthenticated, setIsAuthenticated] = useState(false);
+
+  // Check if user is authenticated on app load
+  useEffect(() => {
+    const userAddress = localStorage.getItem('user_address');
+    setIsAuthenticated(!!userAddress);
+  }, []);
+
   return (
     <MiniKitProvider>
-    <BrowserRouter>
-      <div className="min-h-screen bg-gray-50">
- 
+      <Router>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/kyc" element={<Kyc />} />
           <Route path="/wallet" element={<Wallet />} />
+          <Route path="/verify" element={<Verify />} /> {/* Add new route for verification */}
         </Routes>
-      </div>
-    </BrowserRouter>
-  </MiniKitProvider>
+      </Router>
+    </MiniKitProvider>
   );
 }
+
+export default App;

@@ -207,7 +207,7 @@ function Login() {
       <button 
         onClick={handleLogin}
         disabled={isLoading}
-        className="bg-desertclay hover:bg-opacity-90 text-white px-8 py-4 rounded-lg font-medium disabled:bg-opacity-50 transition-all"
+        className="bg-rustyred hover:bg-opacity-90 text-white px-8 py-4 rounded-lg font-medium disabled:bg-opacity-50 transition-all"
       >
         {isLoading ? 'Connecting...' : 'Sign in with World ID'}
       </button>
