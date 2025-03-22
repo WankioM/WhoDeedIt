@@ -1,5 +1,5 @@
-import { PayBlock } from "./components/Pay";
-import { VerifyBlock } from "./components/Verify";
+
+
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MiniKitProvider from './minikit-provider';
 import Login from './pages/auth/Login';
@@ -14,8 +14,7 @@ export default function App() {
     <MiniKitProvider>
     <BrowserRouter>
       <div className="min-h-screen bg-gray-50">
-        <PayBlock />
-        <VerifyBlock />
+ 
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/login" element={<Login />} />
