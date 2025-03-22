@@ -1,20 +1,51 @@
-// File: server.js
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const { v4: uuidv4 } = require('uuid');
-const cors = require('cors');
-const path = require('path');
+// File: index.ts
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import { v4 as uuidv4 } from 'uuid';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Get current directory in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 5001;
+
+// Configure CORS to allow requests from multiple origins
+const allowedOrigins = [
+  'http://localhost:5000',  // Frontend dev server
+  'http://localhost:5173',  // Another common Vite port
+  'http://localhost:3000',  // Common React dev port
+  'https://who-deed-it-hzfv.vercel.app', // Vercel deployment
+  'https://who-deed-it.vercel.app',      // Potential alternate Vercel domain
+];
 
 // Middleware
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: 'http://localhost:5173', // Your Vite dev server
-  credentials: true
+  origin: function(origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
+      callback(null, true);
+    } else {
+      console.log('Blocked by CORS - origin:', origin);
+      callback(null, true); // Allow all origins in development
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
 }));
+
+// Add health check endpoint
+app.get('/api/health', (req, res) => {
+  res.json({ status: 'ok', environment: process.env.NODE_ENV || 'development' });
+});
 
 // For production, serve the Vite build
 if (process.env.NODE_ENV === 'production') {
@@ -39,10 +70,11 @@ app.get('/api/nonce', (req, res) => {
   res.cookie('sessionId', sessionId, { 
     httpOnly: true, 
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Use 'none' for cross-site requests in production
     maxAge: 15 * 60 * 1000
   });
   
+  console.log(`Generated nonce: ${nonce} for session: ${sessionId}`);
   return res.json({ nonce });
 });
 
@@ -51,8 +83,16 @@ app.post('/api/complete-siwe', async (req, res) => {
   const { payload, nonce } = req.body;
   const sessionId = req.cookies.sessionId;
   
+  console.log('Received SIWE verification request:', { 
+    payload: { ...payload, signature: payload?.signature ? 'PRESENT' : 'MISSING' },
+    nonce,
+    sessionId 
+  });
+  
   // Verify nonce matches what we stored
   const nonceData = nonceStore.get(sessionId);
+  
+  console.log('Stored nonce data:', nonceData);
   
   // Clear expired nonces
   if (nonceData && nonceData.expiry < Date.now()) {
@@ -80,19 +120,23 @@ app.post('/api/complete-siwe', async (req, res) => {
     res.cookie('userAddress', payload.address, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'strict',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
       maxAge: 7 * 24 * 60 * 60 * 1000 // 1 week
     });
     
+    console.log('Authentication successful for address:', payload.address);
     return res.json({
       status: 'success',
       isValid: true
     });
-  } catch (error) {
+  } catch (error: unknown) {
+    const errorMessage = error instanceof Error ? error.message : 'Verification failed';
+    console.error('SIWE verification error:', errorMessage);
+    
     return res.status(400).json({
       status: 'error',
       isValid: false,
-      message: error.message || 'Verification failed'
+      message: errorMessage
     });
   }
 });
@@ -108,4 +152,5 @@ app.get('*', (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
+  console.log(`Environment: ${process.env.NODE_ENV || 'development'}`);
 });
