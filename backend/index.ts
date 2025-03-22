@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import verifyHandler from './verify';
+import verify from 'src/verify';
 
 // Get current directory in ESM
 const __filename = fileURLToPath(import.meta.url);
@@ -68,7 +68,7 @@ app.get('/api/nonce', (req: Request, res: Response) => {
   console.log(`Generated nonce: ${nonce} for session: ${sessionId}`);
   return res.json({ nonce });
 });
-app.post('/api/verify', verifyHandler);
+app.post('/api/verify', verify);
 
 // Complete SIWE verification
 app.post('/api/complete-siwe', async (req: Request, res: Response) => {

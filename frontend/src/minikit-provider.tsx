@@ -43,8 +43,6 @@ const MiniKitProvider = ({ children }: { children: ReactNode }) => {
     // Also patch any global error handlers that might prevent navigation
     const originalOnError = window.onerror;
     window.onerror = function(message, _source, _lineno, _colno, _error) {
-      // Added underscore prefix to unused parameters to fix TypeScript warnings
-      
       // If it's the known World ID username API error, suppress it
       if (message && 
           (message.toString().includes('usernames.worldcoin.org') || 
@@ -60,12 +58,56 @@ const MiniKitProvider = ({ children }: { children: ReactNode }) => {
       return false;
     };
 
+    // CRITICAL FIX: Override MiniKit.isInstalled
+    // This is needed because MiniKit sometimes incorrectly reports not being installed
+    // even when running inside World App
+    if (typeof window !== 'undefined' && window.MiniKit) {
+      const originalIsInstalled = window.MiniKit.isInstalled;
+      window.MiniKit.isInstalled = function() {
+        // Log the original result for debugging
+        const originalResult = originalIsInstalled.apply(this);
+        console.log('Original MiniKit.isInstalled() result:', originalResult);
+        
+        // Check if we're in World App by looking for specific window properties
+        // or by checking the user agent or the URL
+        const isInWorldApp = Boolean(
+          // Check for World App specific properties
+          window.minikit || 
+          window.WorldApp || 
+          // Check if URL has worldcoin.org domain
+          window.location.hostname.includes('worldcoin.org') ||
+          // Check the user agent string for mobile
+          /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+          // If URL has specific query parameters that World App adds
+          window.location.search.includes('world_app=true')
+        );
+        
+        console.log('Enhanced detection - isInWorldApp:', isInWorldApp);
+        
+        // Return true if either the original check worked OR our custom detection worked
+        return originalResult || isInWorldApp;
+      };
+      
+      // Also patch the MiniKit via the prototype if available
+      if (window.MiniKit.prototype) {
+        window.MiniKit.prototype.isInstalled = window.MiniKit.isInstalled;
+      }
+    }
+
     setIsReady(true);
 
-    // Clean up function to restore original fetch
+    // Clean up function to restore original fetch and handlers
     return () => {
       window.fetch = originalFetch;
       window.onerror = originalOnError;
+      
+      // Restore original isInstalled if it was modified
+      if (typeof window !== 'undefined' && window.MiniKit) {
+        const originalIsInstalled = window.MiniKit.__originalIsInstalled;
+        if (originalIsInstalled) {
+          window.MiniKit.isInstalled = originalIsInstalled;
+        }
+      }
     };
   }, []);
 
@@ -77,3 +119,13 @@ const MiniKitProvider = ({ children }: { children: ReactNode }) => {
 };
 
 export default MiniKitProvider;
+
+// Add missing type definition for window
+declare global {
+  interface Window {
+    MiniKit: any;
+    minikit?: any;
+    WorldApp?: any;
+    __originalIsInstalled?: any;
+  }
+}

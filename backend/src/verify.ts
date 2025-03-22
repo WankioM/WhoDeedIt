@@ -8,7 +8,7 @@ interface IRequestPayload {
 }
 
 // Verify World ID proof
-export default async function verifyHandler(req: Request, res: Response) {
+export default async function verify(req: Request, res: Response) {
   try {
     // Extract the payload from the request
     const { payload, action, signal } = req.body as IRequestPayload;
