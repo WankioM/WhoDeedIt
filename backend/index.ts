@@ -1,5 +1,5 @@
 // File: index.ts
-import express from 'express';
+import express, { Request, Response } from 'express';
 import cookieParser from 'cookie-parser';
 import { v4 as uuidv4 } from 'uuid';
 import cors from 'cors';
@@ -34,7 +34,7 @@ app.use(cors({
 }));
 
 // Add health check endpoint
-app.get('/api/health', (req, res) => {
+app.get('/api/health', (req: Request, res: Response) => {
   res.json({ status: 'ok', environment: process.env.NODE_ENV || 'development' });
 });
 
@@ -44,10 +44,10 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 // Simple in-memory nonce storage (for production, use a database)
-const nonceStore = new Map();
+const nonceStore = new Map<string, { nonce: string, expiry: number }>();
 
 // Nonce API
-app.get('/api/nonce', (req, res) => {
+app.get('/api/nonce', (req: Request, res: Response) => {
   // Create a nonce (unique random string)
   const nonce = uuidv4().replace(/-/g, '');
   
@@ -57,20 +57,19 @@ app.get('/api/nonce', (req, res) => {
   
   nonceStore.set(sessionId, { nonce, expiry });
   
-  /
-res.cookie('sessionId', sessionId, { 
-  httpOnly: true, 
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
-  maxAge: 15 * 60 * 1000
-});
+  res.cookie('sessionId', sessionId, { 
+    httpOnly: true, 
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    maxAge: 15 * 60 * 1000
+  });
   
   console.log(`Generated nonce: ${nonce} for session: ${sessionId}`);
   return res.json({ nonce });
 });
 
 // Complete SIWE verification
-app.post('/api/complete-siwe', async (req, res) => {
+app.post('/api/complete-siwe', async (req: Request, res: Response) => {
   const { payload, nonce } = req.body;
   const sessionId = req.cookies.sessionId;
   
@@ -120,7 +119,7 @@ app.post('/api/complete-siwe', async (req, res) => {
       status: 'success',
       isValid: true
     });
-  } catch (error: unknown) {
+  } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Verification failed';
     console.error('SIWE verification error:', errorMessage);
     
@@ -133,7 +132,7 @@ app.post('/api/complete-siwe', async (req, res) => {
 });
 
 // For SPA routing
-app.get('*', (req, res) => {
+app.get('*', (req: Request, res: Response) => {
   if (process.env.NODE_ENV === 'production') {
     res.sendFile(path.join(__dirname, 'dist', 'index.html'));
   } else {
