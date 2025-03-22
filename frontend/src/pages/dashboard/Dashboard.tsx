@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../components/Eruda/layout/Navbar';
-import Sidebar from '../../components/Eruda/layout/Sidebar';
-import UserProfile from '../../components/Eruda/layout/UserProfile';
-import PropertyList from '../../components/Eruda/layout/PropertyList';
-import VerificationStatus from '../../components/Eruda/layout/VerificationStatus';
+import Navbar from '../../components/layout/Navbar';
+import Sidebar from '../../components/layout/Sidebar';
+import UserProfile from '../../components/layout/UserProfile';
+import PropertyList from '../../components/layout/PropertyList';
+import VerificationStatus from '../../components/layout/VerificationStatus';
 import { useAuth } from '../../context/auth-provider';
 
 // Define tab types for the dashboard sections

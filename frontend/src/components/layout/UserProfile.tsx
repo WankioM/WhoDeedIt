@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useAuth } from '../../../context/auth-provider';
+import { useAuth } from '../../context/auth-provider';
 
 function UserProfile() {
   const { userAddress, isVerified } = useAuth();

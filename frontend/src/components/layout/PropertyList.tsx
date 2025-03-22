@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { HomeIcon, MapPinIcon, BuildingOfficeIcon, PlusCircleIcon } from '@heroicons/react/24/outline';
-import { useAuth } from '../../../context/auth-provider';
+import { useAuth } from '../../context/auth-provider';
 
 // Define property types
 type PropertyType = 'residential' | 'commercial' | 'land';

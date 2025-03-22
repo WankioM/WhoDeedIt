@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '../../layout/Navbar';
-import { useAuth } from '../../../context/auth-provider';
+import Navbar from './Navbar';
+import { useAuth } from '../../context/auth-provider';
 
 // Form field types
 interface PropertyForm {
