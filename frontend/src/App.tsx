@@ -6,6 +6,7 @@ import Wallet from './pages/wallet/Wallet';
 import Verify from './pages/auth/Verify'; // Import the new Verify component
 import MiniKitProvider from './minikit-provider';
 import { useEffect, useState } from 'react';
+import Dashboard from './pages/dashboard/Dashboard';
 
 function App() {
   const [_isAuthenticated, setIsAuthenticated] = useState(false);
@@ -24,7 +25,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/wallet" element={<Wallet />} />
-          <Route path="/verify" element={<Verify />} /> {/* Add new route for verification */}
+          <Route path="/verify" element={<Verify />} /> 
+          <Route path="/dashboard" element={<Dashboard />} /> 
         </Routes>
       </Router>
     </MiniKitProvider>
