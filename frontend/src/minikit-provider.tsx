@@ -42,7 +42,9 @@ const MiniKitProvider = ({ children }: { children: ReactNode }) => {
 
     // Also patch any global error handlers that might prevent navigation
     const originalOnError = window.onerror;
-    window.onerror = function(message, source, lineno, colno, error) {
+    window.onerror = function(message, _source, _lineno, _colno, _error) {
+      // Added underscore prefix to unused parameters to fix TypeScript warnings
+      
       // If it's the known World ID username API error, suppress it
       if (message && 
           (message.toString().includes('usernames.worldcoin.org') || 
