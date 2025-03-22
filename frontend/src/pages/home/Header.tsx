@@ -1,13 +1,41 @@
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../context/auth-provider';
 
 export default function Header() {
+  const { isAuthenticated, logout } = useAuth();
+
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
-    <header className="bg-blue-600 px-4 py-3 shadow-md">
+    <header className="bg-graphite px-4 py-3 shadow-md">
       <div className="container mx-auto flex items-center justify-between">
-        <Link to="/" className="text-xl font-bold text-white">WhoDeedIt</Link>
-        <nav className="flex space-x-4">
-          <Link to="/login" className="text-white hover:text-blue-200">Login</Link>
-          <Link to="/signup" className="rounded bg-white px-3 py-1 text-blue-600 hover:bg-blue-100">Sign Up</Link>
+        <div className="flex items-center">
+          <Link to="/" className="text-xl font-bold text-milk font-florssolid">WhoDeedIt</Link>
+        </div>
+        
+        <nav className="flex items-center space-x-4">
+          <Link to="/" className="text-milk hover:text-lightstone hidden sm:block">Home</Link>
+          
+          {isAuthenticated ? (
+            <>
+              <Link to="/dashboard" className="text-milk hover:text-lightstone">Dashboard</Link>
+              <button 
+                onClick={handleLogout}
+                className="rounded bg-lightstone px-3 py-1 text-graphite hover:bg-opacity-80 transition-colors"
+              >
+                Sign Out
+              </button>
+            </>
+          ) : (
+            <>
+              <Link to="/login" className="text-milk hover:text-lightstone">Login</Link>
+              <Link to="/signup" className="rounded bg-milk px-3 py-1 text-graphite hover:bg-lightstone hover:text-milk transition-colors">
+                Sign Up
+              </Link>
+            </>
+          )}
         </nav>
       </div>
     </header>
