@@ -26,20 +26,11 @@ const allowedOrigins = [
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: function(origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    
-    if (allowedOrigins.indexOf(origin) !== -1 || process.env.NODE_ENV !== 'production') {
-      callback(null, true);
-    } else {
-      console.log('Blocked by CORS - origin:', origin);
-      callback(null, true); // Allow all origins in development
-    }
-  },
+  origin: true, // Simplify by allowing all origins
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With']
+  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
+  exposedHeaders: ['Set-Cookie']
 }));
 
 // Add health check endpoint
@@ -66,13 +57,13 @@ app.get('/api/nonce', (req, res) => {
   
   nonceStore.set(sessionId, { nonce, expiry });
   
-  // Set cookie for session tracking
-  res.cookie('sessionId', sessionId, { 
-    httpOnly: true, 
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // Use 'none' for cross-site requests in production
-    maxAge: 15 * 60 * 1000
-  });
+  /
+res.cookie('sessionId', sessionId, { 
+  httpOnly: true, 
+  secure: process.env.NODE_ENV === 'production',
+  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  maxAge: 15 * 60 * 1000
+});
   
   console.log(`Generated nonce: ${nonce} for session: ${sessionId}`);
   return res.json({ nonce });
