@@ -3,7 +3,7 @@ import Home from './pages/home/Home';
 import Login from './pages/auth/Login';
 import SignUp from './pages/auth/Signup';
 import Wallet from './pages/wallet/Wallet';
-import Verify from './pages/auth/Verify'; // Import the new Verify component
+import Verify from './pages/auth/Verify'; 
 import MiniKitProvider from './minikit-provider';
 import { useEffect, useState } from 'react';
 import Dashboard from './pages/dashboard/Dashboard';
