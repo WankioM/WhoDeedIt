@@ -13,11 +13,10 @@ export const generateNonce = (req: any, res: any) => {
   
   nonceStore.set(sessionId, { nonce, expiry });
   
-  // Set cookie for session tracking
   res.cookie('sessionId', sessionId, { 
     httpOnly: true, 
     secure: process.env.NODE_ENV === 'production',
-    sameSite: 'strict',
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
     maxAge: 15 * 60 * 1000
   });
   
