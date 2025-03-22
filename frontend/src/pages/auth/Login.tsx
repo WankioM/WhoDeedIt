@@ -26,7 +26,7 @@ function Login() {
       
       // Use the walletAuth command with proper parameters
       const miniKitAny = MiniKit as any;
-      const { _commandPayload, finalPayload } = await miniKitAny.commandsAsync.walletAuth({
+      const { finalPayload } = await miniKitAny.commandsAsync.walletAuth({
         nonce: nonce,
         expirationTime: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 1 week
         notBefore: new Date(Date.now() - 60 * 1000), // 1 minute ago
@@ -50,6 +50,7 @@ function Login() {
           payload: finalPayload,
           nonce,
         }),
+        credentials: 'include', // Important for cookies to be sent with the request
       });
       
       const verifyResult = await verifyResponse.json();
