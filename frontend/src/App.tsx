@@ -8,6 +8,7 @@ import MiniKitProvider from './minikit-provider';
 import { useEffect, useState } from 'react';
 import Dashboard from './pages/dashboard/Dashboard';
 import Header from './pages/home/Header';
+import { AuthProvider } from './context/auth-provider'; 
 import VerifyOwnership from './components/Eruda/layout/VerifyOwnership';
 
 function App() {
@@ -20,7 +21,8 @@ function App() {
   }, []);
 
   return (
-    <MiniKitProvider>
+    <AuthProvider>
+      <MiniKitProvider>
         <Router>
           <div className="flex flex-col min-h-screen">
             <Header />
@@ -39,6 +41,7 @@ function App() {
           </div>
         </Router>
       </MiniKitProvider>
+    </AuthProvider>
   );
 }
 
