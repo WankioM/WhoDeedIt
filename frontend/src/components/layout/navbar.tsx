@@ -2,7 +2,15 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-provider';
 
-function Navbar() {
+interface NavbarProps {
+  user?: {
+    name: string;
+    image?: string;
+    initials: string;
+  };
+}
+
+function Navbar({ user }: NavbarProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated, userAddress, isVerified, logout } = useAuth();
   const navigate = useNavigate();

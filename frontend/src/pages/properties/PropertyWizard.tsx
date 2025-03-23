@@ -8,13 +8,16 @@ import Step3PropertyDetails from './Step3PropertyDetails';
 import Step4PropertyImages from './Step4PropertyImages';
 import Step5Review from './Step5Review';
 import { CreatePropertyData } from '../../services/PropertyService';
+import { PropertyFormData } from '@/types/property';
+
 
 // Initial form data
-const initialFormData = {
+// Initial form data
+const initialFormData: PropertyFormData = {
   propertyName: '',
   location: '',
   streetAddress: '',
-  propertyType: 'Residential' as const,
+  propertyType: 'Residential', // This is fine since it's one of the union values
   specificType: 'Single Family Home',
   price: 0,
   bedrooms: 0,
@@ -26,7 +29,7 @@ const initialFormData = {
     lat: 0,
     lng: 0
   },
-  images: [] as string[]
+  images: []
 };
 
 function PropertyWizard() {
@@ -35,8 +38,7 @@ function PropertyWizard() {
   const navigate = useNavigate();
   
   // Form state
-  const [formData, setFormData] = useState<typeof initialFormData>(initialFormData);
-  const [imageFiles, setImageFiles] = useState<File[]>([]);
+  const [formData, setFormData] = useState<PropertyFormData>(initialFormData);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
   
   // Wizard state
@@ -56,13 +58,12 @@ function PropertyWizard() {
   }, [isAuthenticated, navigate]);
   
   // Update form data
-  const updateFormData = (newData: Partial<typeof formData>) => {
+  const updateFormData = (newData: Partial<PropertyFormData>) => {
     setFormData(prev => ({
       ...prev,
       ...newData
     }));
   };
-  
   // Handle step changes
   const goToNextStep = () => {
     setCurrentStep(prev => Math.min(prev + 1, 5));
@@ -80,7 +81,7 @@ function PropertyWizard() {
   
   // Handle image uploads
   const handleImagesUploaded = (files: File[], urls: string[]) => {
-    setImageFiles(files);
+   
     setImageUrls(urls);
     updateFormData({ images: urls });
     goToNextStep();
@@ -116,7 +117,7 @@ function PropertyWizard() {
         // Reset form and navigate to dashboard after a delay
         setTimeout(() => {
           setFormData(initialFormData);
-          setImageFiles([]);
+      
           setImageUrls([]);
           navigate('/wallet');
         }, 2000);
@@ -137,10 +138,10 @@ function PropertyWizard() {
       case 1:
         return (
           <Step1DaobitatConnect 
-            onContinue={handleDaobitatConnected}
-            userAddress={user?.walletAddress}
-            isDaobitatConnected={isDaobitatConnected}
-          />
+  onContinue={handleDaobitatConnected}
+  userAddress={user?.walletAddress || null}
+  isDaobitatConnected={isDaobitatConnected}
+/>
         );
       case 2:
         return (

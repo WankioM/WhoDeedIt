@@ -10,7 +10,7 @@ interface Step2Props {
       lng: number;
     };
   };
-  updateFormData: (data: Partial<typeof formData>) => void;
+  updateFormData: (data: Partial<Step2Props['formData']>) => void;
   onBack: () => void;
   onContinue: () => void;
 }
@@ -25,12 +25,16 @@ function Step2BasicInfo({ formData, updateFormData, onBack, onContinue }: Step2P
     if (name.includes('.')) {
       // Handle nested fields like coordinates.lat
       const [parent, child] = name.split('.');
-      updateFormData({
-        [parent]: {
-          ...formData[parent as keyof typeof formData],
-          [child]: value
-        }
-      });
+      const parentKey = parent as keyof typeof formData;
+      
+      if (typeof formData[parentKey] === 'object' && formData[parentKey] !== null) {
+        updateFormData({
+          [parent]: {
+            ...formData[parentKey] as Record<string, any>,
+            [child]: value
+          }
+        });
+      }
     } else {
       updateFormData({ [name]: value });
     }
