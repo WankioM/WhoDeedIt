@@ -80,8 +80,7 @@ function PropertyWizard() {
   };
   
   // Handle image uploads
-  const handleImagesUploaded = (files: File[], urls: string[]) => {
-   
+  const handleImagesUploaded = (_files: File[], urls: string[]) => {
     setImageUrls(urls);
     updateFormData({ images: urls });
     goToNextStep();

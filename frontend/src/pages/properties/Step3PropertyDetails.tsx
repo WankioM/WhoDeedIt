@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { PropertyFormData } from '@/types/property';
 
 // Property types from Daobitat
 const PROPERTY_TYPES = [
@@ -41,16 +42,7 @@ const SPECIFIC_TYPES = {
   ],
 };
 
-interface PropertyFormData {
-  propertyType: string;
-  specificType: string;
-  price: number;
-  bedrooms: number;
-  bathrooms: number;
-  space: number;
-  description: string;
-  action: string;
-}
+
 
 interface Step3Props {
   formData: PropertyFormData;
@@ -68,13 +60,14 @@ function Step3PropertyDetails({ formData, updateFormData, onBack, onContinue }: 
     
     // Special handling for property type changes
     if (name === 'propertyType') {
-      // When property type changes, reset specific type to first option
-      const newSpecificType = SPECIFIC_TYPES[value as keyof typeof SPECIFIC_TYPES][0].value;
+      // Assert that value is a valid property type
+      const propertyType = value as "Residential" | "Commercial" | "Land" | "Special-purpose" | "Vacation/Short-term rentals";
+      const newSpecificType = SPECIFIC_TYPES[propertyType][0].value;
       updateFormData({
-        [name]: value,
+        propertyType, // Use the typed variable
         specificType: newSpecificType
       });
-    } else {
+    }else {
       // Handle numeric values
       if (name === 'price' || name === 'space' || name === 'bedrooms' || name === 'bathrooms') {
         updateFormData({ [name]: value === '' ? 0 : Number(value) });

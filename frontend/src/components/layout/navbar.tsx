@@ -10,7 +10,8 @@ interface NavbarProps {
   };
 }
 
-function Navbar({ user }: NavbarProps) {
+function Navbar({user }: NavbarProps) {
+  console.log(user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated, userAddress, isVerified, logout } = useAuth();
   const navigate = useNavigate();
