@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './Navbar';
 import Sidebar from '../../components/layout/Sidebar';
 import UserProfile from '../../components/layout/UserProfile';
 import PropertyList from '../../components/layout/PropertyList';
 import VerificationStatus from '../../components/layout/VerificationStatus';
 import { useAuth } from '../../context/auth-provider';
+import Navbar from '@/components/layout/Navbar';
 
 // Define tab types for the dashboard sections
 type DashboardTab = 'profile' | 'properties' | 'verifications' | 'status';
