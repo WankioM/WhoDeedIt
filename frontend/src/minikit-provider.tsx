@@ -5,20 +5,93 @@ import React, { createContext, useContext, ReactNode, useEffect } from 'react';
 
 interface MiniKitContextType {
   isReady: boolean;
+  miniKitInstance: any | null;
 }
 
 const MiniKitContext = createContext<MiniKitContextType>({
   isReady: false,
+  miniKitInstance: null
 });
 
 export const useMiniKit = () => useContext(MiniKitContext);
 
 const MiniKitProvider = ({ children }: { children: ReactNode }) => {
   const [isReady, setIsReady] = React.useState(false);
+  const [miniKitInstance, setMiniKitInstance] = React.useState<any | null>(null);
 
   useEffect(() => {
     // Add a global error handler for the usernames.worldcoin.org API
-    // This is a workaround for the MiniKit library bug
+    console.log("MiniKitProvider mounted.");
+
+    // Initialize MiniKit if available
+    if (typeof window !== "undefined" && window.MiniKit) {
+      console.log("MiniKit is available. Attempting to initialize...");
+      
+      try {
+        // Enable debug logging first for better visibility
+        if (window.MiniKit.enableDebugLogging) {
+          window.MiniKit.enableDebugLogging();
+          console.log("MiniKit debug logging enabled");
+        }
+        
+        // Create a new MiniKit instance
+        const miniKitInstance = new window.MiniKit();
+        console.log("MiniKit initialized successfully:", miniKitInstance);
+        
+        // Store the instance in the context state
+        setMiniKitInstance(miniKitInstance);
+        setIsReady(true);
+        
+        // CRITICAL FIX: Override MiniKit.isInstalled
+        // This is needed because MiniKit sometimes incorrectly reports not being installed
+        // even when running inside World App
+        const originalIsInstalled = window.MiniKit.isInstalled;
+        window.MiniKit.__originalIsInstalled = originalIsInstalled;
+        
+        window.MiniKit.isInstalled = function() {
+          // Log the original result for debugging
+          const originalResult = originalIsInstalled.apply(this);
+          console.log('Original MiniKit.isInstalled() result:', originalResult);
+          
+          // Check if we're in World App by looking for specific window properties
+          // or by checking the user agent or the URL
+          const isInWorldApp = Boolean(
+            // Check for World App specific properties
+            window.minikit || 
+            window.WorldApp || 
+            // Check if URL has worldcoin.org domain
+            window.location.hostname.includes('worldcoin.org') ||
+            // Check the user agent string for mobile
+            /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
+            // If URL has specific query parameters that World App adds
+            window.location.search.includes('world_app=true') ||
+            // If we have a valid MiniKit instance
+            miniKitInstance != null
+          );
+          
+          console.log('Enhanced detection - isInWorldApp:', isInWorldApp);
+          
+          // Return true if either the original check worked OR our custom detection worked
+          return originalResult || isInWorldApp;
+        };
+        
+        // Also patch the MiniKit via the prototype if available
+        if (window.MiniKit.prototype) {
+          window.MiniKit.prototype.isInstalled = window.MiniKit.isInstalled;
+        }
+        
+      } catch (error) {
+        console.error("Error initializing MiniKit:", error);
+        
+        // Even if initialization fails, we might still be able to patch the API
+        setIsReady(false);
+      }
+    } else {
+      console.warn("MiniKit is not available. Ensure this is running inside World App.");
+      setIsReady(false);
+    }
+
+    // This is a workaround for the MiniKit library bug with the username API
     const originalFetch = window.fetch;
     
     window.fetch = async function(input, init) {
@@ -58,44 +131,6 @@ const MiniKitProvider = ({ children }: { children: ReactNode }) => {
       return false;
     };
 
-    // CRITICAL FIX: Override MiniKit.isInstalled
-    // This is needed because MiniKit sometimes incorrectly reports not being installed
-    // even when running inside World App
-    if (typeof window !== 'undefined' && window.MiniKit) {
-      const originalIsInstalled = window.MiniKit.isInstalled;
-      window.MiniKit.isInstalled = function() {
-        // Log the original result for debugging
-        const originalResult = originalIsInstalled.apply(this);
-        console.log('Original MiniKit.isInstalled() result:', originalResult);
-        
-        // Check if we're in World App by looking for specific window properties
-        // or by checking the user agent or the URL
-        const isInWorldApp = Boolean(
-          // Check for World App specific properties
-          window.minikit || 
-          window.WorldApp || 
-          // Check if URL has worldcoin.org domain
-          window.location.hostname.includes('worldcoin.org') ||
-          // Check the user agent string for mobile
-          /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ||
-          // If URL has specific query parameters that World App adds
-          window.location.search.includes('world_app=true')
-        );
-        
-        console.log('Enhanced detection - isInWorldApp:', isInWorldApp);
-        
-        // Return true if either the original check worked OR our custom detection worked
-        return originalResult || isInWorldApp;
-      };
-      
-      // Also patch the MiniKit via the prototype if available
-      if (window.MiniKit.prototype) {
-        window.MiniKit.prototype.isInstalled = window.MiniKit.isInstalled;
-      }
-    }
-
-    setIsReady(true);
-
     // Clean up function to restore original fetch and handlers
     return () => {
       window.fetch = originalFetch;
@@ -108,11 +143,18 @@ const MiniKitProvider = ({ children }: { children: ReactNode }) => {
           window.MiniKit.isInstalled = originalIsInstalled;
         }
       }
+      
+      console.log("MiniKitProvider unmounted and cleaned up.");
     };
   }, []);
 
+  // Add some debugging information in the rendered output during development
+  if (process.env.NODE_ENV === 'development') {
+    console.log('MiniKitProvider rendering with status:', { isReady, hasInstance: !!miniKitInstance });
+  }
+
   return (
-    <MiniKitContext.Provider value={{ isReady }}>
+    <MiniKitContext.Provider value={{ isReady, miniKitInstance }}>
       {children}
     </MiniKitContext.Provider>
   );

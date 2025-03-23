@@ -1,87 +1,119 @@
-import Link from "next/link"
-import { RootLayout } from "@/components/layout/root-layout"
+import { Link } from "react-router-dom"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { ArrowRightIcon } from "lucide-react"
+import { ArrowRightIcon, CheckCircle2, Shield, Home } from "lucide-react"
+import { useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
-export default function HomePage() {
+export default function Hero() {
+  // Animation states
+  const [isVisible, setIsVisible] = useState(false)
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    setIsVisible(true)
+  }, [])
+
+  const handleAddProperty = () => {
+    navigate('/dashboard', { state: { activeTab: 'properties' } })
+  }
+  
   return (
-    <RootLayout>
-      {/* Hero Section */}
-      <section className="bg-gradient-to-b from-background to-secondary/20 py-16 md:py-24">
-        <div className="container mx-auto px-4 space-y-8 text-center">
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tighter">
-            Secure Asset Verification with <span className="text-teal-500">Blockchain</span> Power
-          </h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Verify and manage asset ownership with our secure, transparent, and blockchain-enabled KYC platform.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-            <Button size="lg" asChild>
-              <Link href="/signup">
-                Get Started
-                <ArrowRightIcon className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/learn-more">Learn More</Link>
-            </Button>
+    <>
+      {/* Hero Section with Animated Background */}
+      <section className="relative overflow-hidden py-16 md:py-28 bg-gradient-to-b from-milk to-lightstone/40">
+        {/* Animated background elements */}
+        <div className="absolute inset-0 overflow-hidden">
+          <div className="absolute -top-40 -right-40 w-80 h-80 rounded-full bg-gradient-to-r from-lightstone/20 to-graphite/5 blur-3xl transform animate-float-slow" />
+          <div className="absolute top-60 -left-20 w-60 h-60 rounded-full bg-gradient-to-r from-lightstone/30 to-lightstone/10 blur-3xl transform animate-float" />
+          <div className="absolute bottom-0 left-1/2 w-full h-1/2 bg-gradient-to-t from-white to-transparent" />
+        </div>
+        
+        <div className="container relative mx-auto px-4 space-y-8 text-center">
+          <div 
+            className={`transition-all duration-1000 transform ${
+              isVisible ? 'translate-y-0 opacity-100' : 'translate-y-10 opacity-0'
+            }`}
+          >
+            <h1 className="text-4xl md:text-6xl font-florssolid tracking-tighter leading-tight mb-6">
+              Secure <span className="bg-gradient-to-r from-rustyred to-desertclay bg-clip-text text-transparent">Property Verification</span> with Blockchain
+            </h1>
+            <p className="text-xl text-graphite/80 max-w-3xl mx-auto mb-8">
+              Verify and manage property ownership with our secure, transparent, and blockchain-enabled platform.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+              <Button 
+                size="lg" 
+                className="bg-graphite hover:bg-graphite/90 text-milk transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl w-full sm:w-auto"
+                asChild
+              >
+                <Link to="/signup">
+                  Get Started
+                  <ArrowRightIcon className="ml-2 h-4 w-4 animate-bounce-x" />
+                </Link>
+              </Button>
+              <Button 
+                size="lg" 
+                variant="outline" 
+                className="border-graphite text-graphite hover:bg-graphite/5 transition-all duration-300 hover:shadow-md w-full sm:w-auto"
+                asChild
+              >
+                <Link to="/about">Learn More</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-16 md:py-24">
+      {/* Features Section with Hover Effects */}
+      <section className="py-16 md:py-24 bg-white">
         <div className="container mx-auto px-4">
-          <div className="text-center space-y-4 mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold">Key Features</h2>
-            <p className="text-muted-foreground max-w-3xl mx-auto">
+          <div 
+            className="text-center space-y-4 mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-graphite">Key Features</h2>
+            <div className="h-1 w-24 bg-gradient-to-r from-rustyred to-desertclay mx-auto my-4"></div>
+            <p className="text-graphite/80 max-w-3xl mx-auto">
               Our platform combines advanced KYC processes with blockchain technology to provide a secure and transparent verification system.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <Card>
-              <CardContent className="pt-6 space-y-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/10 text-teal-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M21 8V6a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-2" />
-                    <path d="M18 16v-8" />
-                    <line x1="15" y1="12" x2="21" y2="12" />
-                  </svg>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+            {/* Card 1 */}
+            <Card className="border border-lightstone/60 hover:border-desertclay/50 transition-all duration-300 hover:shadow-lg group overflow-hidden">
+              <CardContent className="pt-6 pb-6 space-y-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-lightstone/30 text-rustyred group-hover:scale-110 transition-transform duration-300">
+                  <Shield className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-semibold">Multi-option Authentication</h3>
-                <p className="text-muted-foreground">
-                  Choose from World ID, KYC providers, or wallet connection for flexible yet secure authentication.
+                <h3 className="text-xl font-semibold text-graphite group-hover:text-desertclay transition-colors duration-300">World ID Authentication</h3>
+                <p className="text-graphite/70">
+                  Secure proof-of-personhood with Worldcoin's privacy-preserving identity verification.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent className="pt-6 space-y-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/10 text-teal-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <rect x="3" y="5" width="18" height="14" rx="2" />
-                    <line x1="3" y1="10" x2="21" y2="10" />
-                  </svg>
+            {/* Card 2 */}
+            <Card className="border border-lightstone/60 hover:border-desertclay/50 transition-all duration-300 hover:shadow-lg group overflow-hidden">
+              <CardContent className="pt-6 pb-6 space-y-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-lightstone/30 text-rustyred group-hover:scale-110 transition-transform duration-300">
+                  <CheckCircle2 className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-semibold">Blockchain Verification</h3>
-                <p className="text-muted-foreground">
-                  Asset ownership certificates stored on blockchain for immutable, transparent verification.
+                <h3 className="text-xl font-semibold text-graphite group-hover:text-desertclay transition-colors duration-300">Blockchain Verification</h3>
+                <p className="text-graphite/70">
+                  Property ownership documents verified and stored on blockchain for immutable proof.
                 </p>
               </CardContent>
             </Card>
 
-            <Card>
-              <CardContent className="pt-6 space-y-4">
-                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-teal-500/10 text-teal-500">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                  </svg>
+            {/* Card 3 */}
+            <Card className="border border-lightstone/60 hover:border-desertclay/50 transition-all duration-300 hover:shadow-lg group overflow-hidden">
+              <CardContent className="pt-6 pb-6 space-y-4">
+                <div className="flex items-center justify-center w-12 h-12 rounded-full bg-lightstone/30 text-rustyred group-hover:scale-110 transition-transform duration-300">
+                  <Home className="h-6 w-6" />
                 </div>
-                <h3 className="text-xl font-semibold">Secure Transfer System</h3>
-                <p className="text-muted-foreground">
-                  Easily and securely transfer property ownership with blockchain-verified transactions.
+                <h3 className="text-xl font-semibold text-graphite group-hover:text-desertclay transition-colors duration-300">Secure Property Transfer</h3>
+                <p className="text-graphite/70">
+                  Seamlessly transfer verified property ownership with tamper-proof records.
                 </p>
               </CardContent>
             </Card>
@@ -89,40 +121,33 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Stats Section */}
-      <section className="py-16 md:py-24 bg-secondary/20">
+      {/* CTA Section with Background Pattern */}
+      <section className="py-16 md:py-24 overflow-hidden">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div className="space-y-2">
-              <p className="text-4xl md:text-5xl font-bold text-teal-500">10,000+</p>
-              <p className="text-muted-foreground">Properties Verified</p>
+          <div className="relative bg-graphite rounded-xl p-8 md:p-12 text-center space-y-6 text-white overflow-hidden">
+            {/* Background pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute top-0 left-0 w-full h-full" 
+                   style={{backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.1) 1px, transparent 1px)', backgroundSize: '20px 20px'}}></div>
             </div>
-            <div className="space-y-2">
-              <p className="text-4xl md:text-5xl font-bold text-teal-500">5,000+</p>
-              <p className="text-muted-foreground">Satisfied Users</p>
-            </div>
-            <div className="space-y-2">
-              <p className="text-4xl md:text-5xl font-bold text-teal-500">99.9%</p>
-              <p className="text-muted-foreground">Verification Success Rate</p>
+            
+            <div className="relative z-10">
+              <h2 className="text-3xl md:text-4xl font-bold text-white mb-6">Ready to Verify Your Property?</h2>
+              <p className="text-white/80 max-w-2xl mx-auto mb-8">
+                Join our platform for secure, blockchain-powered property verification and management.
+              </p>
+              <Button 
+                size="lg" 
+                className="bg-desertclay text-milk hover:bg-desertclay/90 transform transition-all duration-300 hover:scale-105 shadow-lg hover:shadow-xl"
+                onClick={handleAddProperty}
+              >
+                Add Property Now
+                <ArrowRightIcon className="ml-2 h-4 w-4" />
+              </Button>
             </div>
           </div>
         </div>
       </section>
-
-      {/* CTA Section */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="bg-slate-800 rounded-xl p-8 md:p-12 text-center space-y-6 text-white">
-            <h2 className="text-3xl md:text-4xl font-bold text-white">Ready to Verify Your Asset?</h2>
-            <p className="text-white/90 max-w-2xl mx-auto">
-              Join thousands of users who trust our platform for secure, blockchain-powered asset verification.
-            </p>
-            <Button size="lg" className="bg-teal-500 hover:bg-teal-600" asChild>
-              <Link href="/signup">Get Started Now</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-    </RootLayout>
+    </>
   )
 }

@@ -1,10 +1,9 @@
 import Hero from './Hero';
-import Footer from './Footer';
 
 export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
-      {/* Removed the Header component from here since it's already in App.tsx */}
+      {/* Removed the Header component since it's already in App.tsx */}
       <Hero />
       <main className="container mx-auto flex-grow py-8">
         <section className="mb-12">
@@ -25,7 +24,7 @@ export default function Home() {
           </div>
         </section>
       </main>
-      <Footer />
+      {/* Removed Footer component since it's now in App.tsx */}
     </div>
   );
 }

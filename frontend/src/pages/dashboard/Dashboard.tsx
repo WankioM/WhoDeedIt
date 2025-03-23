@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState, useEffect, useRef } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../../components/layout/Sidebar';
 import UserProfile from '../../components/layout/UserProfile';
 import PropertyList from '../../components/layout/PropertyList';
 import VerificationStatus from '../../components/layout/VerificationStatus';
 import { useAuth } from '../../context/auth-provider';
-import Navbar from '@/components/layout/Navbar';
 
 // Define tab types for the dashboard sections
 type DashboardTab = 'profile' | 'properties' | 'verifications' | 'status';
@@ -15,6 +14,18 @@ function Dashboard() {
   const [isLoading, setIsLoading] = useState(true);
   const { isAuthenticated, isVerified } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+  const initialRender = useRef(true);
+
+  // Check for tab passed from navigation
+  useEffect(() => {
+    if (initialRender.current) {
+      initialRender.current = false;
+      if (location.state && location.state.activeTab) {
+        setActiveTab(location.state.activeTab as DashboardTab);
+      }
+    }
+  }, [location]);
 
   // Check authentication status
   useEffect(() => {
@@ -50,7 +61,6 @@ function Dashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-milk">
-        <Navbar /> {/* Changed from lowercase <navbar /> to <Navbar /> */}
         <div className="flex justify-center items-center h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-desertclay"></div>
         </div>
@@ -60,8 +70,6 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-milk">
-      <Navbar /> {/* Changed from lowercase <navbar /> to <Navbar /> */}
-      
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto pt-6 px-4 sm:px-6 lg:px-8">
         {/* Sidebar for larger screens */}
         <aside className="hidden md:block md:w-64 pr-6">
@@ -112,7 +120,7 @@ function Dashboard() {
               </p>
               <button 
                 onClick={() => navigate('/verify')}
-                className="mt-2 px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white rounded-lg text-sm"
+                className="mt-2 px-4 py-2 bg-rustyred hover:bg-rustyred/90 text-white rounded-lg text-sm"
               >
                 Verify Identity
               </button>

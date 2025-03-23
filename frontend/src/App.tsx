@@ -7,9 +7,8 @@ import Verify from './pages/auth/Verify';
 import MiniKitProvider from './minikit-provider';
 import Dashboard from './pages/dashboard/Dashboard';
 import Header from './pages/home/Header';
+import Footer from './components/layout/footer'; // Use consistent import path
 import { AuthProvider } from './context/auth-provider'; 
-
-
 
 function App() {
   return (
@@ -30,6 +29,8 @@ function App() {
                 <Route path="/property/verify" element={<Verify />} />
               </Routes>
             </main>
+            
+            <Footer /> 
           </div>
         </Router>
       </MiniKitProvider>

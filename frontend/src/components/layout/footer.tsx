@@ -1,8 +1,5 @@
-"use client"
-
 import { useNavigate } from 'react-router-dom';
-import Link from "next/link";
-import { Separator } from "@/components/ui/separator";
+import { Link } from 'react-router-dom';
 
 export default function Footer() {
   const navigate = useNavigate();
@@ -12,43 +9,43 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-background border-t">
-      <div className="kyc-container py-10">
+    <footer className="bg-milk border-t border-lightstone/30">
+      <div className="container mx-auto py-10 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-3">
-            <h3 className="font-bold text-xl text-primary">
-              Asset<span className="text-teal">Verify</span>
+            <h3 className="font-bold text-xl text-graphite">
+              Who<span className="text-desertclay">Deed</span>It
             </h3>
-            <p className="text-muted-foreground text-sm max-w-xs">
-              Secure asset ownership verification with blockchain integration and cutting-edge KYC technology.
+            <p className="text-graphite/70 text-sm max-w-xs">
+              Secure property ownership verification with blockchain integration and cutting-edge World ID technology.
             </p>
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-medium">Quick Links</h4>
+            <h4 className="font-medium text-graphite">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/" className="text-graphite/70 hover:text-graphite transition-colors">
                   Home
                 </Link>
               </li>
               <li>
                 <button
-                  onClick={() => handleNavigation('/kyc')}
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => handleNavigation('/verify')}
+                  className="text-graphite/70 hover:text-graphite transition-colors"
                 >
                   Verify Identity
                 </button>
               </li>
               <li>
-                <Link href="/dashboard" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/dashboard" className="text-graphite/70 hover:text-graphite transition-colors">
                   Dashboard
                 </Link>
               </li>
               <li>
                 <button
                   onClick={() => handleNavigation('/wallet')}
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-graphite/70 hover:text-graphite transition-colors"
                 >
                   My Properties
                 </button>
@@ -57,25 +54,25 @@ export default function Footer() {
           </div>
 
           <div className="space-y-3">
-            <h4 className="font-medium">Help & Support</h4>
+            <h4 className="font-medium text-graphite">Help & Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/faq" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/faq" className="text-graphite/70 hover:text-graphite transition-colors">
                   FAQ
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/contact" className="text-graphite/70 hover:text-graphite transition-colors">
                   Contact Us
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/privacy" className="text-graphite/70 hover:text-graphite transition-colors">
                   Privacy Policy
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/terms" className="text-graphite/70 hover:text-graphite transition-colors">
                   Terms of Service
                 </Link>
               </li>
@@ -83,18 +80,18 @@ export default function Footer() {
           </div>
         </div>
 
-        <Separator className="my-6" />
+        <div className="h-px w-full bg-lightstone/30 my-6"></div>
 
-        <div className="flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
-          <p>© 2025 AssetVerify. All rights reserved.</p>
+        <div className="flex flex-col md:flex-row items-center justify-between text-sm text-graphite/70">
+          <p>© 2025 WhoDeedIt. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link href="/privacy" className="hover:text-primary transition-colors">
+            <Link to="/privacy" className="hover:text-graphite transition-colors">
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">
+            <Link to="/terms" className="hover:text-graphite transition-colors">
               Terms
             </Link>
-            <Link href="/cookies" className="hover:text-primary transition-colors">
+            <Link to="/cookies" className="hover:text-graphite transition-colors">
               Cookies
             </Link>
           </div>

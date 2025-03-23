@@ -26,6 +26,7 @@
     "@radix-ui/react-toggle": "^1.1.2",
     "@radix-ui/react-tooltip": "^1.1.8",
     "@types/node": "^20.17.25",
+    "@worldcoin/id": "^0.9.2",
     "@worldcoin/minikit-js": "1.1.1",
     "@worldcoin/minikit-react": "^1.8.0",
     "class-variance-authority": "^0.7.1",
