@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '@/components/layout/navbar';
+import Navbar from '@/components/layout/Navbar'; // Changed import path to lowercase
 import Sidebar from '../../components/layout/Sidebar';
 import UserProfile from '../../components/layout/UserProfile';
 import PropertyList from '../../components/layout/PropertyList';
@@ -50,7 +50,7 @@ function Dashboard() {
   if (isLoading) {
     return (
       <div className="min-h-screen bg-milk">
-        <Navbar />
+        <Navbar /> {/* Changed from lowercase <navbar /> to <Navbar /> */}
         <div className="flex justify-center items-center h-screen">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-desertclay"></div>
         </div>
@@ -60,7 +60,7 @@ function Dashboard() {
 
   return (
     <div className="min-h-screen bg-milk">
-      <Navbar />
+      <Navbar /> {/* Changed from lowercase <navbar /> to <Navbar /> */}
       
       <div className="flex flex-col md:flex-row max-w-7xl mx-auto pt-6 px-4 sm:px-6 lg:px-8">
         {/* Sidebar for larger screens */}

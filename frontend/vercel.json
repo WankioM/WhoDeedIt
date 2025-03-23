@@ -1,0 +1,10 @@
+{
+    "git": {
+      "caseSensitive": true
+    },
+    "build": {
+      "env": {
+        "NEXT_PUBLIC_CASE_SENSITIVE_PATHS": "true"
+      }
+    }
+  }

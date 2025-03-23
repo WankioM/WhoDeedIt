@@ -10,7 +10,8 @@ interface NavbarProps {
   };
 }
 
-function navbar({user }: NavbarProps) {
+// Changed function name from 'navbar' to 'Navbar' (capital N)
+function Navbar({user }: NavbarProps) {
   console.log(user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated, userAddress, isVerified, logout } = useAuth();
@@ -253,4 +254,5 @@ function navbar({user }: NavbarProps) {
   );
 }
 
-export default navbar;
+// Export the component with the name "Navbar"
+export default Navbar;

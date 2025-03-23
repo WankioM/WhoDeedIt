@@ -1,0 +1,6 @@
+# Set default behavior to use Git to use case-sensitive handling
+* text=auto
+
+# Ensure case sensitivity for TypeScript files
+*.ts case-sensitive
+*.tsx case-sensitive

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from './navbar';
+import Navbar from './Navbar';
 import { useAuth } from '../../context/auth-provider';
 
 // Form field types
