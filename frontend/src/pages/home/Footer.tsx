@@ -1,7 +1,5 @@
-"use client"
 
-import { useNavigate } from 'react-router-dom';
-import Link from "next/link";
+import { useNavigate } from "react-router-dom";
 import { Separator } from "@/components/ui/separator";
 
 export default function Footer() {
@@ -12,15 +10,15 @@ export default function Footer() {
   };
 
   return (
-    <footer className="bg-background border-t">
-      <div className="kyc-container py-10">
+    <footer className="bg-graphite text-milk">
+      <div className="container mx-auto py-8 md:py-10 px-4">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           <div className="space-y-3">
-            <h3 className="font-bold text-xl text-primary">
-              Asset<span className="text-teal">Verify</span>
+            <h3 className="font-bold text-xl">
+              Who<span className="text-desertclay">Deed</span>It
             </h3>
-            <p className="text-muted-foreground text-sm max-w-xs">
-              Secure asset ownership verification with blockchain integration and cutting-edge KYC technology.
+            <p className="text-milk/80 text-sm max-w-xs">
+              Secure property ownership verification with blockchain integration and World ID identity verification.
             </p>
           </div>
 
@@ -28,27 +26,33 @@ export default function Footer() {
             <h4 className="font-medium">Quick Links</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => handleNavigation('/')}
+                  className="text-milk/70 hover:text-desertclay transition-colors"
+                >
                   Home
-                </Link>
+                </button>
               </li>
               <li>
                 <button
-                  onClick={() => handleNavigation('/kyc')}
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  onClick={() => handleNavigation('/signup')}
+                  className="text-milk/70 hover:text-desertclay transition-colors"
                 >
                   Verify Identity
                 </button>
               </li>
               <li>
-                <Link href="/dashboard" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => handleNavigation('/dashboard')}
+                  className="text-milk/70 hover:text-desertclay transition-colors"
+                >
                   Dashboard
-                </Link>
+                </button>
               </li>
               <li>
                 <button
                   onClick={() => handleNavigation('/wallet')}
-                  className="text-muted-foreground hover:text-primary transition-colors"
+                  className="text-milk/70 hover:text-desertclay transition-colors"
                 >
                   My Properties
                 </button>
@@ -60,43 +64,64 @@ export default function Footer() {
             <h4 className="font-medium">Help & Support</h4>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/faq" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => handleNavigation('/faq')}
+                  className="text-milk/70 hover:text-desertclay transition-colors"
+                >
                   FAQ
-                </Link>
+                </button>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => handleNavigation('/contact')}
+                  className="text-milk/70 hover:text-desertclay transition-colors"
+                >
                   Contact Us
-                </Link>
+                </button>
               </li>
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => handleNavigation('/privacy')}
+                  className="text-milk/70 hover:text-desertclay transition-colors"
+                >
                   Privacy Policy
-                </Link>
+                </button>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-primary transition-colors">
+                <button
+                  onClick={() => handleNavigation('/terms')}
+                  className="text-milk/70 hover:text-desertclay transition-colors"
+                >
                   Terms of Service
-                </Link>
+                </button>
               </li>
             </ul>
           </div>
         </div>
 
-        <Separator className="my-6" />
+        <Separator className="my-6 bg-milk/20" />
 
-        <div className="flex flex-col md:flex-row items-center justify-between text-sm text-muted-foreground">
-          <p>© 2025 AssetVerify. All rights reserved.</p>
+        <div className="flex flex-col md:flex-row items-center justify-between text-sm text-milk/60">
+          <p>© 2025 WhoDeedIt. All rights reserved.</p>
           <div className="flex space-x-4 mt-4 md:mt-0">
-            <Link href="/privacy" className="hover:text-primary transition-colors">
+            <button
+              onClick={() => handleNavigation('/privacy')}
+              className="hover:text-desertclay transition-colors"
+            >
               Privacy
-            </Link>
-            <Link href="/terms" className="hover:text-primary transition-colors">
+            </button>
+            <button
+              onClick={() => handleNavigation('/terms')}
+              className="hover:text-desertclay transition-colors"
+            >
               Terms
-            </Link>
-            <Link href="/cookies" className="hover:text-primary transition-colors">
+            </button>
+            <button
+              onClick={() => handleNavigation('/cookies')}
+              className="hover:text-desertclay transition-colors"
+            >
               Cookies
-            </Link>
+            </button>
           </div>
         </div>
       </div>

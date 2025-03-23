@@ -148,6 +148,21 @@ const MiniKitProvider = ({ children }: { children: ReactNode }) => {
     };
   }, []);
 
+  useEffect(() => {
+    const debugMiniKit = () => {
+      console.log("Window.MiniKit available:", !!window.MiniKit);
+      console.log("Window.minikit available:", !!window.minikit);
+      console.log("Window.WorldApp available:", !!window.WorldApp);
+      console.log("User Agent:", navigator.userAgent);
+    };
+    
+    // Log immediately and then every second
+    debugMiniKit();
+    const interval = setInterval(debugMiniKit, 5000);
+    
+    return () => clearInterval(interval);
+  }, []);
+
   // Add some debugging information in the rendered output during development
   if (process.env.NODE_ENV === 'development') {
     console.log('MiniKitProvider rendering with status:', { isReady, hasInstance: !!miniKitInstance });
