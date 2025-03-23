@@ -8,7 +8,8 @@ import MiniKitProvider from './minikit-provider';
 import Dashboard from './pages/dashboard/Dashboard';
 import Header from './pages/home/Header';
 import { AuthProvider } from './context/auth-provider'; 
-import VerifyOwnership from './components/Eruda/layout/VerifyOwnership';
+
+
 
 function App() {
   return (
@@ -26,7 +27,7 @@ function App() {
                 <Route path="/wallet" element={<Wallet />} />
                 <Route path="/verify" element={<Verify />} /> 
                 <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/property/verify" element={<VerifyOwnership />} />
+                <Route path="/property/verify" element={<Verify />} />
               </Routes>
             </main>
           </div>

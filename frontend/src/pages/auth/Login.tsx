@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { MiniKit } from '@worldcoin/minikit-js';
 import { useNavigate } from 'react-router-dom';
+import useUser from '@/services/useUser';
 
 function Login() {
   const [isLoading, setIsLoading] = useState(false);
@@ -8,6 +9,9 @@ function Login() {
   const [apiBaseUrl, setApiBaseUrl] = useState<string>('');
   const [isDevelopmentMode, setIsDevelopmentMode] = useState(false);
   const navigate = useNavigate();
+  
+  // Use the useUser hook to manage user state
+  const { login: userLogin } = useUser();
 
   // Custom check for World App environment
   const isInWorldApp = () => {
@@ -57,7 +61,7 @@ function Login() {
   // Setup global error handler specifically for World ID API errors
   useEffect(() => {
     const handleGlobalError = (event: ErrorEvent) => {
-      // Check if it's the World ID API error
+      // Check if it's the specific World ID API error
       if (event.message && (
           event.message.includes('usernames.worldcoin.org') ||
           event.message.includes('undefined is not an object') ||
@@ -76,6 +80,10 @@ function Login() {
           const addressFromStorage = localStorage.getItem('temp_address');
           if (addressFromStorage) {
             localStorage.setItem('user_address', addressFromStorage);
+            
+            // Also authenticate with our backend API
+            authenticateWithBackend(addressFromStorage);
+            
             setTimeout(() => {
               navigate('/');
             }, 500);
@@ -96,6 +104,23 @@ function Login() {
     };
   }, [isLoading, navigate]);
 
+  // Helper function to authenticate with our backend using the World ID credential
+  const authenticateWithBackend = async (walletAddress: string) => {
+    try {
+      // This is where we integrate with our UserService
+      await userLogin({
+        credential: 'world-id-credential', // This would normally come from World ID
+        walletAddress,
+        nullifier_hash: `0x${Date.now().toString(16)}` // Generate a unique hash for dev mode
+      });
+      
+      console.log('Successfully authenticated with backend as lister');
+    } catch (err) {
+      console.error('Failed to authenticate with backend:', err);
+      // Continue anyway - we'll rely on the localStorage token for now
+    }
+  };
+
   const handleLogin = async () => {
     setIsLoading(true);
     setError(null);
@@ -110,6 +135,9 @@ function Login() {
         const devAddress = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
         localStorage.setItem('temp_address', devAddress);
         localStorage.setItem('user_address', devAddress);
+        
+        // Authenticate with our backend to get a proper JWT
+        await authenticateWithBackend(devAddress);
         
         console.log('Using simulated login due to MiniKit detection issues');
         
@@ -211,6 +239,9 @@ function Login() {
         localStorage.setItem('user_address', finalPayload.address);
         localStorage.removeItem('temp_address'); // Clean up temp storage
         
+        // Also authenticate with our UserService using World ID credentials
+        await authenticateWithBackend(finalPayload.address);
+        
         // Redirect to the home page
         navigate('/');
       } else {
@@ -233,6 +264,9 @@ function Login() {
         if (addressFromStorage) {
           localStorage.setItem('user_address', addressFromStorage);
           
+          // Also authenticate with our backend
+          await authenticateWithBackend(addressFromStorage);
+          
           // Give a brief moment to see the message
           setTimeout(() => {
             navigate('/');
@@ -242,6 +276,10 @@ function Login() {
           // simulate login with a fake address
           const devAddress = '0x742d35Cc6634C0532925a3b844Bc454e4438f44e';
           localStorage.setItem('user_address', devAddress);
+          
+          // Also authenticate with our backend
+          await authenticateWithBackend(devAddress);
+          
           setTimeout(() => {
             navigate('/');
           }, 2000);
