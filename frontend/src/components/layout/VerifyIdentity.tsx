@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MiniKit, VerificationLevel, VerifyCommandInput } from '@worldcoin/minikit-js';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-provider';
-import Navbar from './Navbar';
+import Navbar from './navbar';
 
 function VerifyIdentity() {
   const [isVerifying, setIsVerifying] = useState(false);

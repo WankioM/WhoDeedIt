@@ -10,7 +10,7 @@ interface NavbarProps {
   };
 }
 
-function Navbar({user }: NavbarProps) {
+function navbar({user }: NavbarProps) {
   console.log(user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated, userAddress, isVerified, logout } = useAuth();
@@ -253,4 +253,4 @@ function Navbar({user }: NavbarProps) {
   );
 }
 
-export default Navbar;
+export default navbar;
