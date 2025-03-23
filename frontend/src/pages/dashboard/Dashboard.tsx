@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Navbar from '@/components/layout/Navbar'; // Changed import path to lowercase
+import Navbar from './Navbar';
 import Sidebar from '../../components/layout/Sidebar';
 import UserProfile from '../../components/layout/UserProfile';
 import PropertyList from '../../components/layout/PropertyList';

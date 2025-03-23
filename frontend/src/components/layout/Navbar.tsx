@@ -2,7 +2,17 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/auth-provider';
 
-function Navbar() {
+interface NavbarProps {
+  user?: {
+    name: string;
+    image?: string;
+    initials: string;
+  };
+}
+
+// Changed function name from 'navbar' to 'Navbar' (capital N)
+function Navbar({user }: NavbarProps) {
+  console.log(user);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { isAuthenticated, userAddress, isVerified, logout } = useAuth();
   const navigate = useNavigate();
@@ -244,4 +254,5 @@ function Navbar() {
   );
 }
 
+// Export the component with the name "Navbar"
 export default Navbar;
